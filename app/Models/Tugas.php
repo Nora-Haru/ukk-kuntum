@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class TugasModel extends Model
 {
     use HasFactory;
-    protected $table = 'taks';
+    protected $table = 'task';
 
     protected $fillable = [
         'tugas',
         'prioritas',
-        'tanggal',
+        'tgl_dibuat',
         'status',
     ];
 }

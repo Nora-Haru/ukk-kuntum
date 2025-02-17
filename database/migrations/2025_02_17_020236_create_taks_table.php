@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('taks', function (Blueprint $table) {
+        Schema::create('task', function (Blueprint $table) {
             $table->id();
             $table->string('tugas');
-            $table->enum('prioritas', ['1','2','3'])->default('1');
-            $table->date('tanggal')->nullable();
+            $table->enum('prioritas', ['Penting', 'Tidak Penting', 'Sangat Penting']);
+            $table->date('tgl_dibuat')->default(now());
+            $table->date('tgl_selesai');
             $table->enum('status', ['Selesai','Belum Selesai'])->default('Belum Selesai');
             $table->timestamps();
         });
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taks');
+        Schema::dropIfExists('task');
     }
 };
