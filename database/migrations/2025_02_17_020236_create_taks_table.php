@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('tugas');
             $table->enum('prioritas', ['1','2','3'])->default('1');
             $table->date('tanggal')->nullable();
-            $table->enum('status', ['selesai','belum selesai'])->default('belum selesai');
+            $table->enum('status', ['Selesai','Belum Selesai'])->default('Belum Selesai');
             $table->timestamps();
         });
     }
