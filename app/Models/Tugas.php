@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class TugasModel extends Model
+class Tugas extends Model
 {
     use HasFactory;
-    protected $table = 'task';
+    // protected $table = 'task';
 
     protected $fillable = [
         'tugas',

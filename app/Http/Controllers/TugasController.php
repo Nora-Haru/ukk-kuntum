@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\TugasModel;
+use App\Models\Tugas;
 
 
 class TugasController extends Controller
 {
-    public function task(){
-        $todo = TugasModel::all();
-        return view('todo',compact('tasks'));
+    public function index(){
+        $tasks = Tugas::all();
+        return view('task.todo',compact('tasks'));
     }
 
    
@@ -29,12 +29,12 @@ class TugasController extends Controller
     //     $taks->save();
     // }   
 
-    public function hapus($id)
-    {
-        $task = TugasModel::find($id);
-        $task->delete();
-        // return redirect()->route('todo');
-    }
+    // public function hapus($id)
+    // {
+    //     $task = Tugas::find($id);
+    //     $task->delete();
+    //     // return redirect()->route('todo');
+    // }
 
 
 
@@ -48,15 +48,15 @@ class TugasController extends Controller
             'status' => 'required|in:Belum Selesai,Selesai',
         ]);
 
-        TugasModel::create($request->all());
+        Tugas::create($request->all());
 
-        return redirect()->route('todo')->with('success', 'Tugas berhasil ditambahkan!');
+        return redirect()->route('task.todo')->with('success', 'Tugas berhasil ditambahkan!');
     }
 
     public function edit($id)
     {
-        $task = TugasModel::findOrFail($id);
-        return view('tasks.edit', compact('todo'));
+        $task = Tugas::findOrFail($id);
+        return view('tasks.edit', compact('task'));
     }
 
     public function update(Request $request, $id)
@@ -68,16 +68,16 @@ class TugasController extends Controller
             'status' => 'required|in:Belum Selesai,Selesai',
         ]);
 
-        $task = TugasModel::findOrFail($id);
+        $task = Tugas::findOrFail($id);
         $task->update($request->all());
 
-        return redirect()->route('todo')->with('success', 'Task berhasil diperbarui!');
+        return redirect()->route('task.todo')->with('success', 'Task berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
-        TugasModel::destroy($id);
-        return redirect()->route('todo')->with('success', 'Task berhasil dihapus!');
+        Tugas::destroy($id);
+        return redirect()->route('task.todo')->with('success', 'Task berhasil dihapus!');
     }
 
 

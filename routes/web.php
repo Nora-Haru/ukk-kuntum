@@ -14,3 +14,4 @@ Route::post( '/list',[TugasController::class,'list'])->name('list');
 Route::get('/tasks/{id}/edit', [TugasController::class, 'edit'])->name('tasks.edit');
 Route::put('/tasks/{id}', [TugasController::class, 'update'])->name('tasks.update');
 Route::delete('/tasks/{id}', [TugasController::class, 'destroy'])->name('tasks.destroy');
+
