@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('task', function (Blueprint $table) {
             $table->id();
             $table->string('tugas');
-            $table->enum('prioritas', ['Penting', 'Tidak Penting', 'Sangat Penting']);
+            $table->enum('prioritas', ['Sangat Penting','Penting', 'Tidak Penting']);
             $table->date('tgl_dibuat')->default(now());
-            $table->date('tgl_selesai');
             $table->enum('status', ['Selesai','Belum Selesai'])->default('Belum Selesai');
+            $table->date('tgl_selesai')->nullable();
             $table->timestamps();
+            
         });
     }
 

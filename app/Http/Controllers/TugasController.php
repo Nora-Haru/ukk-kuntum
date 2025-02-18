@@ -4,82 +4,75 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tugas;
+use Carbon\Carbon;
 
 
 class TugasController extends Controller
 {
-    public function index(){
-        $tasks = Tugas::all();
-        return view('task.todo',compact('tasks'));
+
+    public function todo()
+    {
+        $task = Tugas::orderBy('prioritas', 'asc')->get();
+        return view('task.todo', compact('task'));
     }
+    public function create()
+    {
+        return view('task.create');
+    }
+    public function store(Request $request)
+    {
+        // dd($request->all());
+        // $request->validate([
+        //     'tugas' => 'required|string|max:255',
+        //     'prioritas' => 'required|in:Penting,Tidak Penting,Sangat Penting',
+        //     'tgl_dibuat' => 'required|date',
+        // ]);
 
-   
-    // public function tambah(Request $request){
-    //     dd($request);
-    //     Tugas::create($request->all());
-    //     return redirect()->route('todo');
-    // }   
+        $list = new Tugas();
+        $list->tugas = $request->tugas;
+        $list->prioritas = $request->prioritas;
+        $list->tgl_dibuat = $request->tgl_dibuat;
 
-    // function list(Request $request){
-    //     $taks = New TugasModel();
-    //     $taks->tugas = $request->tugas;
-    //     $taks->prioritas = $request->prioritas;
-    //     $taks->tanggal = $request->tanggal;
+        $list->save();
+        return redirect()->route('todo');
+        // return redirect()->back()->with('success', 'Tugas berhasil ditambahkan!');
+    }
+    public function toggleStatus($id)
+    {
+        $dayli = Tugas::findOrFail($id);
 
-    //     $taks->save();
-    // }   
+        // Ubah status (misalnya dari 0 ke 1 atau sebaliknya)
+        if ($dayli->status == "Belum Selesai") {
+            $dayli->status = "Selesai";
+            $dayli->tgl_selesai = Carbon::now()->toDateString(); // Set tgl selesai ke hari ini
+        } else {
+            $dayli->status = "Belum Selesai";
+            $dayli->tgl_selesai = null; // Reset tanggal selesai jika tugas belum selesai
+        }
+        $dayli->save();
 
-    // public function hapus($id)
+        return redirect()->route('todo');
+    }
+    // public function edit(Request $request, $id)
     // {
-    //     $task = Tugas::find($id);
-    //     $task->delete();
-    //     // return redirect()->route('todo');
+    //     $task = Tugas::findOrFail($id);
+    //     // return view('task.edit', compact('task'));
     // }
-
-
-
-
-    public function list(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'priority' => 'required|in:Tidak Penting,Penting,Sangat Penting',
-            'due_date' => 'required|date',
-            'status' => 'required|in:Belum Selesai,Selesai',
-        ]);
-
-        Tugas::create($request->all());
-
-        return redirect()->route('task.todo')->with('success', 'Tugas berhasil ditambahkan!');
-    }
-
-    public function edit($id)
-    {
-        $task = Tugas::findOrFail($id);
-        return view('tasks.edit', compact('task'));
-    }
-
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'priority' => 'required|in:Tidak Penting,Penting,Sangat Penting',
-            'due_date' => 'required|date',
-            'status' => 'required|in:Belum Selesai,Selesai',
-        ]);
+        $todos = Tugas::findOrFail($id);
+        $todos->tugas = $request->tugas;
+        $todos->prioritas = $request->prioritas;
+     
 
-        $task = Tugas::findOrFail($id);
-        $task->update($request->all());
+        $todos->save();
+        return redirect()->route('todo');
 
-        return redirect()->route('task.todo')->with('success', 'Task berhasil diperbarui!');
     }
-
     public function destroy($id)
     {
-        Tugas::destroy($id);
-        return redirect()->route('task.todo')->with('success', 'Task berhasil dihapus!');
+        $todos = Tugas::findOrFail($id);
+        $todos->delete();
+        return redirect()->route('todo');
     }
-
-
-    
 }
