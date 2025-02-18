@@ -12,31 +12,28 @@ class TugasController extends Controller
 
     public function todo()
     {
-        $task = Tugas::orderBy('prioritas', 'asc')->get();
-        return view('task.todo', compact('task'));
+        //digunakan untuk mengambil data dari tabel tugas dan mengurutkannya berdasarkan kolom prioritas dengan urutan ascending (naik), 
+        //yaitu dari yang memiliki prioritas rendah ke yang tinggi.
+        $task = Tugas::orderBy('prioritas', 'asc')->get(); 
+        return view('task.todo', compact('task')); //mengembalikan tampilan (view) dan mengirimkan data ke tampilan tersebut
     }
+
     public function create()
     {
-        return view('task.create');
+        return view('task.create'); //mengembalikan sebuah tampilan (view) kepada pengguna
     }
-    public function store(Request $request)
-    {
-        // dd($request->all());
-        // $request->validate([
-        //     'tugas' => 'required|string|max:255',
-        //     'prioritas' => 'required|in:Penting,Tidak Penting,Sangat Penting',
-        //     'tgl_dibuat' => 'required|date',
-        // ]);
 
+    public function store(Request $request) //save data yang di input
+    {
         $list = new Tugas();
         $list->tugas = $request->tugas;
         $list->prioritas = $request->prioritas;
         $list->tgl_dibuat = $request->tgl_dibuat;
 
         $list->save();
-        return redirect()->route('todo');
-        // return redirect()->back()->with('success', 'Tugas berhasil ditambahkan!');
+        return redirect()->route('todo'); //mengembalikan tampilan ke halaman awal
     }
+
     public function toggleStatus($id)
     {
         $dayli = Tugas::findOrFail($id);
@@ -53,22 +50,17 @@ class TugasController extends Controller
 
         return redirect()->route('todo');
     }
-    // public function edit(Request $request, $id)
-    // {
-    //     $task = Tugas::findOrFail($id);
-    //     // return view('task.edit', compact('task'));
-    // }
+    
     public function update(Request $request, $id)
     {
         $todos = Tugas::findOrFail($id);
         $todos->tugas = $request->tugas;
         $todos->prioritas = $request->prioritas;
      
-
         $todos->save();
         return redirect()->route('todo');
-
     }
+
     public function destroy($id)
     {
         $todos = Tugas::findOrFail($id);

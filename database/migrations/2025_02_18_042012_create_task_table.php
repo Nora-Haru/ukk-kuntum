@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //Schema::create(): Digunakan untuk membuat tabel baru di database.
+        //Blueprint $table untuk mendefinisikan struktur tabel yang akan dibuat atau dimodifikasi di database.
         Schema::create('task', function (Blueprint $table) {
             $table->id();
             $table->string('tugas');
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('task');
+        Schema::dropIfExists('task'); //untuk menghapus tabel dari database jika tabel tersebut sudah ada.
     }
 };
