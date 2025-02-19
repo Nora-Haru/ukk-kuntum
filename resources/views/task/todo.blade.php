@@ -8,7 +8,6 @@
     
     <link rel="icon" type="image/x-icon" href="{{asset('image/logo.gif')}}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Menambahkan Bootstrap Icons dari CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -16,7 +15,7 @@
 
 <body>
     <div class="container mt-3">
-        <h1 class="text-center">To-Do List Tugas</h1> <!--judul-->
+        <h1 class="text-center">To-Do List Tugas</h1> 
         <form method="POST" action="{{ route('store') }}" class="border rouded bg-light p-2">
             @csrf <!-- Cross-Site Request Forgery (CSRF) Protection agar formulir lebih aman. -->
 
@@ -40,8 +39,15 @@
             <!-- save tugas -->
             <button type="submit" class="btn btn-primary w-100 mt-2">Tambah Tugas</button>
         </form>
-        <hr> <!-- Garis pemisah -->
+        <br>
 
+        <!-- btn tampilan data sesuai hari-->
+        <a href="?filter=today" type="button" class="btn btn-outline-secondary">Hari ini</a>
+        <a href="?filter=tomorrow" type="button" class="btn btn-outline-secondary">Besok</a>
+        <a href="?filter=selesai" type="button" class="btn btn-outline-secondary">Tugas Selesai</a>
+        <a href="?filter=semuatugas" type="button" class="btn btn-outline-secondary">Semua Tugas</a>
+
+        <hr> <!-- Garis pemisah -->
         <table class="table table-striped text-center">
             <thead>
                 <tr>
@@ -55,7 +61,8 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+
+            <tbody id="todo-table">
                 @foreach ($task as $row) <!-- Menampilkan semua data tugas yang ada di database. -->
                     <tr>
                         <th scope="row">{{ $loop->iteration }}</th> <!--untuk mendapatkan nomor urut dari iterasi dalam perulangan foreach.-->
@@ -76,7 +83,7 @@
                         </td>
 
                         <td class="d-flex gap-1 justify-content-center">
-                            <button type="button" class="btn btn-warning"  data-bs-toggle="modal" data-bs-target="#edit{{$row->id}}" @if($row->status == 'Selesai') disabled @endif > {{--Tombol Edit akan nonaktif jika tugas sudah selesai (disabled).--}}
+                            <button type="button" class="btn btn-warning"  data-bs-toggle="modal" data-bs-target="#edit{{$row->id}}" @if($row->status == 'Selesai') disabled @endif > {{--button Edit akan nonaktif jika tugas sudah selesai (disabled).--}}
                                 <i class="bi bi-pencil"></i> <!--icoon-->
                             </button>
 
@@ -134,6 +141,33 @@
         @endforeach
     </div>
 
+    {{-- <script>
+        $(document).ready(function() {
+            $('#show-selesai-tasks').click(function() {
+                $.ajax({
+                    url: "{{ route('tugas.selesai',['id' => $todos->id]) }}",
+                    type: "GET",
+                    success: function(respone(){
+                        let rows = '';
+                        if (respone.length > Selesai) {
+                            respone.forEach(todo => {
+                                rows += '<tr>
+                                    <td>${$row.tugas}</td>
+                                    <td>${$row.prioritas}</td>
+                                    <td>${$row.tgl_dibuat}</td>
+                                    <td>${$row.tgl_selesai}</td>
+                                    <td>${$row.status}</td>
+                                    </tr>';
+                            });
+                        } 
+                        else {
+                            rows = <tr><td colspan='4'>Belum ada tugas yang selesai</td></tr>
+                        }
+                    })
+                })
+            })
+        })
+    </script> --}}
 </body>
 
 </html>

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tugas;
 use Carbon\Carbon;
-
+use Illuminate\Support\Carbon as SupportCarbon;
 
 class TugasController extends Controller
 {
@@ -14,7 +14,34 @@ class TugasController extends Controller
     {
         //digunakan untuk mengambil data dari tabel tugas dan mengurutkannya berdasarkan kolom prioritas dengan urutan ascending (naik), 
         //yaitu dari yang memiliki prioritas rendah ke yang tinggi.
-        $task = Tugas::orderBy('prioritas', 'asc')->get(); 
+        
+        // $todo = Tugas::wheredate('tgl_dibuat',[Carbon::today()])->orderBy('tgl_dibuat')->get();
+        // $todo = Tugas::wheredate('tgl_dibuat', [Carbon::tomorrow()])->orderBy('tgl_dibuat')->get();
+        // $today = Carbon::today();
+        // echo $today;
+        // $tomorrow = Carbon::tomorrow();
+        // echo $tomorrow;
+        // $selesai = tugas::where('status', Carbon::now()->addDays(7)->toDateString())
+        //             ->orderBy('status')
+        //             ->get();
+
+        $task = Tugas::query();
+
+        if(request('filter') == 'today'){
+            $task->whereDate('tgl_dibuat', Carbon::now());
+        }
+
+        if(request('filter') == 'tomorrow'){
+            $task->whereDate('tgl_dibuat', Carbon::now()->addDay());
+        }
+
+        if(request('filter')== 'selesai'){
+            $task->where('status', true);
+        }
+
+        $task = $task->orderBy('prioritas', 'asc')->get();
+
+        // $task = Tugas::orderBy('prioritas', 'asc')->get(); 
         return view('task.todo', compact('task')); //mengembalikan tampilan (view) dan mengirimkan data ke tampilan tersebut
     }
 
@@ -23,7 +50,7 @@ class TugasController extends Controller
         return view('task.create'); //mengembalikan sebuah tampilan (view) kepada pengguna
     }
 
-    public function store(Request $request) //save data yang di input
+    public function store(Request $request) //save data yang di input 
     {
         $list = new Tugas();
         $list->tugas = $request->tugas;
@@ -67,4 +94,20 @@ class TugasController extends Controller
         $todos->delete();
         return redirect()->route('todo');
     }
+
+    public function getTodayTasks()
+    {
+        $today = Carbon::today();  // Mendapatkan tanggal hari ini
+        $tasks = Tugas::whereDate('tgl_dibuat', $today)->get();
+
+        return view('today', compact('tasks'));
+    }
+    public function getTomorrowTasks()
+    {
+        $today = Carbon::today();  // Mendapatkan tanggal hari ini
+        $tasks = Tugas::whereDate('tgl_dibuat', $today)->get();
+
+        return view('tomorrow', compact('tasks'));
+    }
+
 }
