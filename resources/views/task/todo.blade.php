@@ -42,9 +42,10 @@
         <br>
 
         <!-- btn tampilan data sesuai hari-->
-        <a href="?filter=today" type="button" class="btn btn-outline-secondary">Hari ini</a>
-        <a href="?filter=tomorrow" type="button" class="btn btn-outline-secondary">Besok</a>
+        <a href="?filter=today" type="button" class="btn btn-outline-secondary">Tugas Hari ini</a>
+        <a href="?filter=tomorrow" type="button" class="btn btn-outline-secondary">Tugas Besok</a>
         <a href="?filter=selesai" type="button" class="btn btn-outline-secondary">Tugas Selesai</a>
+        {{-- <a href="?filter=belumselesai" type="button" class="btn btn-outline-secondary">Tugas Belum Selesai</a> --}}
         <a href="?filter=semuatugas" type="button" class="btn btn-outline-secondary">Semua Tugas</a>
 
         <hr> <!-- Garis pemisah -->

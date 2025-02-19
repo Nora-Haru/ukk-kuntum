@@ -39,6 +39,10 @@ class TugasController extends Controller
             $task->where('status', true);
         }
 
+        // if(request('filter')== 'belumselesai'){
+        //     $task->where('status', false);
+        // }
+
         $task = $task->orderBy('prioritas', 'asc')->get();
 
         // $task = Tugas::orderBy('prioritas', 'asc')->get(); 
